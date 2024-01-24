@@ -5,44 +5,51 @@
  */
 package Chiper;
 
+import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 
 /**
  *
- * @author Egoitz
+ * @author Diego
  */
 public class GenerarClaves {
 
-    public void keyGenerator() {
+    public void keyGenerator(String folderPath) {
         try {
-            // Especificamos el algoritmo de encriptación
             KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-            // Especificamos el tamaño en bits de las claves
             keyPairGenerator.initialize(2048);
-            // Se genera el par de claves
             KeyPair keyPair = keyPairGenerator.generateKeyPair();
 
-            PublicKey publicKeyAndMore = keyPair.getPublic();
-            byte[] publicKeyBytes = publicKeyAndMore.getEncoded();
-
-            try (FileOutputStream publicKeyFile = new FileOutputStream("c:\\claves\\publicKey.der")) {
-                publicKeyFile.write(publicKeyBytes);
+            File folder = new File(folderPath);
+            if (!folder.exists()) {
+                if (folder.mkdirs()) {
+                    System.out.println("Carpeta creada exitosamente en: " + folderPath);
+                } else {
+                    System.err.println("Error al crear la carpeta");
+                    return;
+                }
             }
 
-            PrivateKey privateKey = keyPair.getPrivate();
-            byte[] privateKeyBytes = privateKey.getEncoded();
-            try (FileOutputStream privateKeyFile = new FileOutputStream("c:\\claves\\privateKey.der")) {
-                privateKeyFile.write(privateKeyBytes);
-            }
+            saveKeyToFile(folderPath + File.separator + "publicKey.der", keyPair.getPublic().getEncoded());
+            saveKeyToFile(folderPath + File.separator + "privateKey.der", keyPair.getPrivate().getEncoded());
 
             System.out.println("Ficheros de Clave Generados!");
-        } catch (IOException | NoSuchAlgorithmException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void saveKeyToFile(String filePath, byte[] keyBytes) {
+        try (FileOutputStream fos = new FileOutputStream(filePath)) {
+            fos.write(keyBytes);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
