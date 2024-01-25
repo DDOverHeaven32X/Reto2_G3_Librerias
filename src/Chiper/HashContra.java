@@ -14,20 +14,24 @@ public class HashContra {
 
     private static final Logger LOGGER = java.util.logging.Logger.getLogger("/Cipher/HashContra");
 
-    public static String hashContra(byte[] texto) {
-        MessageDigest md;
-        String encriptacion = "SHA";
-        String msj = null;
-
+    public static String hashContra(String texto) {
         try {
-            md = MessageDigest.getInstance(encriptacion);
-            md.update(texto);
-            byte[] digest = md.digest();
-            msj = Arrays.toString(digest);
+            MessageDigest md5 = MessageDigest.getInstance("MD5");
+            byte[] hashBytes = md5.digest(texto.getBytes());
+
+            // Convert the byte array to a hexadecimal representation
+            StringBuilder hexStringBuilder = new StringBuilder();
+            for (byte b : hashBytes) {
+                String hex = String.format("%02X", b);
+                hexStringBuilder.append(hex);
+            }
+            System.out.println(hexStringBuilder.toString());
+            return hexStringBuilder.toString();
+
         } catch (NoSuchAlgorithmException e) {
-            LOGGER.log(Level.SEVERE, null, e);
+            e.printStackTrace();
+            return null;
         }
 
-        return msj;
     }
 }
