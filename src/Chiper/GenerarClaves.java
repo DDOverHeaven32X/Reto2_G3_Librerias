@@ -51,5 +51,13 @@ public class GenerarClaves {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
+
+    public static void main(String[] args) {
+        GenerarClaves generarClaves = new GenerarClaves();
+        generarClaves.keyGenerator("C:\\Cifrado");
+
+    }
+
 }
