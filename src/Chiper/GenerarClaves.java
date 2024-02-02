@@ -15,11 +15,18 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
 /**
+ * Método que genera las claves publicas y privadas para hacer la criptografia
+ * asimetrica entre el cliente y el servidor
  *
  * @author Diego
  */
 public class GenerarClaves {
 
+    /**
+     * Método que genera las claves
+     *
+     * @param folderPath
+     */
     public void keyGenerator(String folderPath) {
         try {
             KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
@@ -45,6 +52,12 @@ public class GenerarClaves {
         }
     }
 
+    /**
+     * Método que gaurda las claves generadas
+     *
+     * @param filePath
+     * @param keyBytes
+     */
     private void saveKeyToFile(String filePath, byte[] keyBytes) {
         try (FileOutputStream fos = new FileOutputStream(filePath)) {
             fos.write(keyBytes);
@@ -54,6 +67,11 @@ public class GenerarClaves {
 
     }
 
+    /**
+     * Main que genera las claves desde el servidor
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         GenerarClaves generarClaves = new GenerarClaves();
         generarClaves.keyGenerator("C:\\Cifrado");
